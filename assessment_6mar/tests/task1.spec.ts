@@ -12,5 +12,4 @@ test("tokyo olympics", async ({ page }) => {
     console.log("Gold medals:", gold);
     await page.waitForTimeout(5000);
     await page.screenshot({ path: "task6.jpeg", fullPage: true });
-
 });     
