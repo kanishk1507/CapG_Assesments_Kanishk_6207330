@@ -9,8 +9,6 @@ test('Login scenario - QSpiders Demo', async ({ page }) => {
   await page.getByLabel('Password').fill('admin@123');
 
   await page.getByRole('button', { name: 'Login' }).click();
-//   await expect(page.getByText('Dashboard')).toBeVisible();
-//   await expect(page.getByRole('button', { name: 'Logout' })).toBeVisible();
 
 await expect(page.getByRole('button', { name: 'Login' })).toBeVisible();
 await expect(page).toHaveScreenshot("task1.png");
