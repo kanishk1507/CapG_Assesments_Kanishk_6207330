@@ -1,26 +1,39 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 import excel from "exceljs"
 import path from "path"
 
-test("Reading test data", async ({ page }) => {
-    let book = new excel.Workbook();
-    await book.xlsx.readFile(
-        path.join(__dirname, "testdata/readexcel.xlsx")
-    );
-    const sheet1 = book.getWorksheet("Sheet1");
-    for (let i = 2; i <= sheet1.rowCount; i++) {
-        const row = sheet1.getRow(i);
-        const urlCell = row.getCell(1).value;
-        const url = typeof urlCell === "object" ? urlCell.text : urlCell;
-        const name = String(row.getCell(2).value);
-        const email = String(row.getCell(3).value);
-        const password = String(row.getCell(4).value);
-        
-        console.log(url, name, email, password);        
-        await page.goto(url);
-        await page.fill("#name", name);
-        await page.fill("#email", email);
-        await page.fill("#password", password);
-        await page.click("button[type='submit']");
+test("Excel data recovery", async ({ page }) => {
+    let book = new excel.Workbook()
+    await book.xlsx.readFile(path.join(__dirname, "testdata/readexcel.xlsx"))
+    let sheet = await book.getWorksheet("Sheet1")
+    const rowCount = sheet.rowCount
+
+    for (let i = 2; i <= rowCount; i++) {
+        const row = sheet.getRow(i)
+        const firstName = row.getCell(1).value?.toString()
+        const lastName = row.getCell(2).value?.toString()
+        const email = row.getCell(3).toString()
+        const gender = row.getCell(4).value?.toString()
+        const mobile = row.getCell(5).value?.toString()
+
+        await page.goto('https://demoqa.com/automation-practice-form')
+        await page.fill('#firstName', firstName!)
+        await page.fill('#lastName', lastName!)
+        await page.fill('#userEmail', String(email))
+        if (gender === "Male") {
+            await page.locator('label[for="gender-radio-1"]').click()
+        }
+        else if (gender === "Female") {
+            await page.locator('label[for="gender-radio-2"]').click()
+        }
+        else {
+            await page.locator('label[for="gender-radio-3"]').click()
+        }
+
+        await page.fill('#userNumber', mobile!)
+        await page.click('#submit')
+        await expect(page.locator('#example-modal-sizes-title-lg')).toHaveText('Thanks for submitting the form')
+        await page.screenshot({path:"excel.png"})
+        await page.click('#closeLargeModal')
     }
-});
+})
