@@ -1,0 +1,14 @@
+{
+  "customer": {
+    "firstName": "Kanishk",
+    "lastName": "Acharya",
+    "postCode": "12345"
+  },
+  "account": {
+    "currency": "Dollar"
+  },
+  "transactions": {
+    "deposit": 1000,
+    "withdraw": 200
+  }
+}
