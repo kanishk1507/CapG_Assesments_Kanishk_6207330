@@ -13,7 +13,6 @@ test('API testing with playwright on SS', async ({ request }) => {
     let jwt = (await r1.json()).data.jwtToken;
     let shopperId = (await r1.json()).data.userId;
     console.log(shopperId)
-    ......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
     console.log(jwt);
 
 
@@ -35,15 +34,110 @@ test('API testing with playwright on SS', async ({ request }) => {
             quantity: 0
         }, ignoreHTTPSErrors: true
     })
-    // let body = await r3.json();
-//     if(r3){
-//         const data = JSON.parse(r3);
-//         console.log(data);
-// }
-// else{
-//     console.log("No response body received.");
-// }
 
-console.log(await r3.status());
 
+    console.log(await r3.status());
+    console.log(await r3.json());
+
+
+    let r4 = await request.get(`${baseURL}/shoppers/${shopperId}/wishlist`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }, ignoreHTTPSErrors: true
+    })
+    console.log(await r4.json());
+
+    let r5 = await request.post(`${baseURL}/shoppers/${shopperId}/address`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        },
+        data: {
+
+            addressId: 2,
+            buildingInfo: "House No. 45, Sharma Villa",
+            city: "Jaipur",
+            country: "India",
+            landmark: "Near Central Park",
+            name: "Aryan Upadhyay",
+            phone: "9123456789",
+            pincode: "432101",
+            state: "maharashtra",
+            streetInfo: "C-Scheme, Ashok Nagar",
+            type: "Home"
+        }, ignoreHTTPSErrors: true
+    })
+    console.log(await r5.status());
+    console.log(await r5.json());
+    let aId = (await r5.json()).data.addressId;
+    console.log(aId);
+
+    let r6 = await request.get(`${baseURL}/shoppers/${shopperId}/address`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }, ignoreHTTPSErrors: true
+    })
+    console.log(await r6.json());
+
+    let r7 = await request.get(`${baseURL}/shoppers/${shopperId}/address/${aId}`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }, ignoreHTTPSErrors: true
+    })
+    console.log(await r7.json());
+
+    let r8 = await request.put(`${baseURL}/shoppers/${shopperId}/address/${aId}`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        },
+        data: {
+            addressId: aId,
+            buildingInfo: "House No. 45, Sharma Villa",
+            city: "Pune",
+            country: "India",
+            landmark: "Near Central Park",
+            name: "Ajay Sharma",
+            phone: "9123456789",
+            pincode: "432101",
+            state: "maharashtra",
+            streetInfo: "C-Scheme, Ashok Nagar",
+            type: "Home"
+        },ignoreHTTPSErrors:true
+    })
+    console.log(await r8.status());
+    console.log(await r8.json());
+
+
+    // let r9 = await request.post(`${baseURL}/shoppers/${shopperId}/carts`, {
+    //     headers: {
+    //         Authorization: `Bearer ${jwt}`
+    //     },
+    //     data:{
+    //         productId : pId,
+    //         quantity:4
+    //     },ignoreHTTPSErrors:true
+    // })
+    // console.log(await r9.status());
+    // console.log(await r9.json());
+    
+
+    let r10 = await request.get(`${baseURL}/shoppers/${shopperId}/carts`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        },ignoreHTTPSErrors:true
+    })
+    console.log(await r10.json());
+    let iId = (await r10.json()).data.itemId;
+    console.log(iId);
+
+    let r11 = await request.put(`${baseURL}/shoppers/${shopperId}/carts/${iId}`, {
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        },
+        data:{
+            productId:pId,
+            quantity: 7
+        },ignoreHTTPSErrors:true
+    })
+    console.log(await r11.status());
+    console.log(await r11.json());
 })
