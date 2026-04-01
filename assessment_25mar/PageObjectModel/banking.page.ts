@@ -55,9 +55,6 @@ class BankingPage{
         this.withdAmount=page.locator('[ng-model="amount"]')
         this.depositBtn=page.locator('[type="submit"]')
         this.withdrawBtn=page.locator('[type="submit"]')
-        
-        
-
     }
     async addCustomerDetails(fName,lName,pCode){
         await this.selectManagerLogin.click()
